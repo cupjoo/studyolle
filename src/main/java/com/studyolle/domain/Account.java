@@ -1,5 +1,6 @@
 package com.studyolle.domain;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 @Builder
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@Getter
 @EqualsAndHashCode(of = "id")
 @Entity
 public class Account {
@@ -43,5 +44,13 @@ public class Account {
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+    }
+    public void completeSignUp(){
+        this.emailVerified = true;
+        this.joinedAt = LocalDateTime.now();
+    }
+
+    public boolean isValidToken(String token) {
+        return emailCheckToken.equals(token);
     }
 }

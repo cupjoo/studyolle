@@ -23,10 +23,11 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void processNewAccout(SignUpForm signUpForm) {
-        Account newAccount = saveNewAccount(signUpForm);
-        newAccount.generateEmailCheckToken();
-        sendSignUpConfirmEmail(newAccount);
+    public Account processNewAccout(SignUpForm signUpForm) {
+        Account account = saveNewAccount(signUpForm);
+        account.generateEmailCheckToken();
+        sendSignUpConfirmEmail(account);
+        return account;
     }
 
     private Account saveNewAccount(@Valid SignUpForm signUpForm) {
@@ -48,5 +49,13 @@ public class AccountService {
         mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken()
                 + "&email=" + newAccount.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                account.getNickname(),
+                account.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(token);
     }
 }

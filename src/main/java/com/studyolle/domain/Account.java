@@ -35,6 +35,7 @@ public class Account {
     @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
+    private LocalDateTime emailCheckTokenGeneratedAt;
     private boolean studyCreatedByEmail;
     private boolean studyCreatedByWeb;
     private boolean studyEnrollmentResultByEmail;
@@ -44,6 +45,7 @@ public class Account {
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
     public void completeSignUp(){
         this.emailVerified = true;
@@ -52,5 +54,9 @@ public class Account {
 
     public boolean isValidToken(String token) {
         return emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 }

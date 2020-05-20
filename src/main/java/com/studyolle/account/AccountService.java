@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class AccountService implements UserDetailsService {
 
@@ -66,11 +67,16 @@ public class AccountService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
-
         if(account == null){
             account = Optional.of(accountRepository.findByNickname(emailOrNickname))
                     .orElseThrow(() -> new UsernameNotFoundException(emailOrNickname));
         }
         return new UserAccount(account);
+    }
+
+    @Transactional
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 }

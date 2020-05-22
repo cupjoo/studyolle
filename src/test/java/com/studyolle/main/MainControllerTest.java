@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -84,7 +83,7 @@ class MainControllerTest {
         signUpForm.setNickname(nickname);
         signUpForm.setEmail(email);
         signUpForm.setPassword(password);
-        accountService.processNewAccout(signUpForm);
+        accountService.processNewAccount(signUpForm);
     }
 
     @AfterEach

@@ -59,4 +59,15 @@ public class Account {
     public boolean canSendConfirmEmail() {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
+
+    public void changeInfo(String url, String occupation, String location, String bio){
+        if(url != null)
+            this.url = url;
+        if(occupation != null)
+            this.occupation = occupation;
+        if(location != null)
+            this.location = location;
+        if(bio != null)
+            this.bio = bio;
+    }
 }

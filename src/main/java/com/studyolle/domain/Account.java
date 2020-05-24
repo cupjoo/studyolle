@@ -1,6 +1,5 @@
 package com.studyolle.domain;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.*;
 
 import javax.persistence.*;

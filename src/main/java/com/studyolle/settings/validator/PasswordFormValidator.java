@@ -1,8 +1,11 @@
-package com.studyolle.settings;
+package com.studyolle.settings.validator;
 
+import com.studyolle.settings.form.PasswordForm;
 import org.springframework.validation.*;
 
 public class PasswordFormValidator implements Validator {
+
+    // 사용하는 빈이 없으므로 빈으로 등록 X
 
     @Override
     public boolean supports(Class<?> clazz) {

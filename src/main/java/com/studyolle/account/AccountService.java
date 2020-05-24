@@ -85,8 +85,8 @@ public class AccountService implements UserDetailsService {
     public void updateProfile(Account account, Profile profile) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changeInfo(profile.getUrl(),
-                profile.getOccupation(),
-                profile.getLocation(), profile.getBio());
-        // TODO 프로필 이미지
+                profile.getOccupation(), profile.getLocation(),
+                profile.getBio(), profile.getProfileImage());
+        updateAccount.updateProfileImage(profile.getProfileImage());
     }
 }

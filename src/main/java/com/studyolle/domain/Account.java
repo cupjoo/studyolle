@@ -60,7 +60,8 @@ public class Account {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 
-    public void changeInfo(String url, String occupation, String location, String bio){
+    public void changeInfo(String url, String occupation, String location,
+                           String bio, String profileImage){
         if(url != null)
             this.url = url;
         if(occupation != null)
@@ -69,5 +70,11 @@ public class Account {
             this.location = location;
         if(bio != null)
             this.bio = bio;
+        if(profileImage != null)
+            this.profileImage = profileImage;
+    }
+
+    public void updateProfileImage(String profileImage){
+        this.profileImage = profileImage;
     }
 }

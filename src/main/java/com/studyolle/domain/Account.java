@@ -60,33 +60,7 @@ public class Account {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 
-    public void changeInfo(String url, String occupation, String location,
-                           String bio, String profileImage){
-        if(url != null)
-            this.url = url;
-        if(occupation != null)
-            this.occupation = occupation;
-        if(location != null)
-            this.location = location;
-        if(bio != null)
-            this.bio = bio;
-        if(profileImage != null)
-            this.profileImage = profileImage;
-    }
-
     public void changePassword(String newPassword) {
         this.password = newPassword;
-    }
-
-    public void changeNotifications(boolean studyCreatedByWeb, boolean studyCreatedByEmail,
-                                    boolean studyUpdatedByWeb, boolean studyUpdatedByEmail,
-                                    boolean studyEnrollmentResultByEmail,
-                                    boolean studyEnrollmentResultByWeb) {
-        this.studyCreatedByWeb = studyCreatedByWeb;
-        this.studyCreatedByEmail = studyCreatedByEmail;
-        this.studyUpdatedByWeb = studyUpdatedByWeb;
-        this.studyUpdatedByEmail = studyUpdatedByEmail;
-        this.studyEnrollmentResultByEmail = studyEnrollmentResultByEmail;
-        this.studyEnrollmentResultByWeb = studyEnrollmentResultByWeb;
     }
 }

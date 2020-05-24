@@ -101,4 +101,11 @@ public class AccountService implements UserDetailsService {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         modelMapper.map(notifications, updateAccount);
     }
+
+    @Transactional
+    public void updateNickname(Account account, String nickname) {
+        Account updateAccount = accountRepository.findByNickname(account.getNickname());
+        updateAccount.changeNickname(nickname);
+        login(updateAccount);
+    }
 }

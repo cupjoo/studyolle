@@ -62,4 +62,8 @@ public class Account {
     public void changePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

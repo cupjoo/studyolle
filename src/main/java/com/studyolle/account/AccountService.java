@@ -1,8 +1,10 @@
 package com.studyolle.account;
 
 import com.studyolle.domain.Account;
+import com.studyolle.settings.PasswordForm;
 import com.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -87,6 +89,11 @@ public class AccountService implements UserDetailsService {
         updateAccount.changeInfo(profile.getUrl(),
                 profile.getOccupation(), profile.getLocation(),
                 profile.getBio(), profile.getProfileImage());
-        updateAccount.updateProfileImage(profile.getProfileImage());
+    }
+
+    @Transactional
+    public void updatePassword(Account account, String newPassword) {
+        Account updateAccount = accountRepository.findByNickname(account.getNickname());
+        updateAccount.changePassword(passwordEncoder.encode(newPassword));
     }
 }

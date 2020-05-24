@@ -19,6 +19,7 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
+    // signUpForm (클래스명 camel case) 데이터 들어올 시 validator 등록
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpFormValidator);

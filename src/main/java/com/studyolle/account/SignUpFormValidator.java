@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+// 커스텀 검증
 @RequiredArgsConstructor
 @Component
 public class SignUpFormValidator implements Validator {

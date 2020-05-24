@@ -74,7 +74,7 @@ public class Account {
             this.profileImage = profileImage;
     }
 
-    public void updateProfileImage(String profileImage){
-        this.profileImage = profileImage;
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

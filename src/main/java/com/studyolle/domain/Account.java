@@ -37,11 +37,11 @@ public class Account {
 
     private LocalDateTime emailCheckTokenGeneratedAt;
     private boolean studyCreatedByEmail;
-    private boolean studyCreatedByWeb;
+    private boolean studyCreatedByWeb = true;
     private boolean studyEnrollmentResultByEmail;
-    private boolean studyEnrollmentResultByWeb;
+    private boolean studyEnrollmentResultByWeb = true;
     private boolean studyUpdatedByEmail;
-    private boolean studyUpdatedByWeb;
+    private boolean studyUpdatedByWeb = true;
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -76,5 +76,17 @@ public class Account {
 
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void changeNotifications(boolean studyCreatedByWeb, boolean studyCreatedByEmail,
+                                    boolean studyUpdatedByWeb, boolean studyUpdatedByEmail,
+                                    boolean studyEnrollmentResultByEmail,
+                                    boolean studyEnrollmentResultByWeb) {
+        this.studyCreatedByWeb = studyCreatedByWeb;
+        this.studyCreatedByEmail = studyCreatedByEmail;
+        this.studyUpdatedByWeb = studyUpdatedByWeb;
+        this.studyUpdatedByEmail = studyUpdatedByEmail;
+        this.studyEnrollmentResultByEmail = studyEnrollmentResultByEmail;
+        this.studyEnrollmentResultByWeb = studyEnrollmentResultByWeb;
     }
 }

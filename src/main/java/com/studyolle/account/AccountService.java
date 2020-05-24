@@ -1,6 +1,7 @@
 package com.studyolle.account;
 
 import com.studyolle.domain.Account;
+import com.studyolle.settings.Notifications;
 import com.studyolle.settings.PasswordForm;
 import com.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
@@ -95,5 +96,16 @@ public class AccountService implements UserDetailsService {
     public void updatePassword(Account account, String newPassword) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changePassword(passwordEncoder.encode(newPassword));
+    }
+
+    @Transactional
+    public void updateNotifications(Account account, Notifications notifications) {
+        Account updateAccount = accountRepository.findByNickname(account.getNickname());
+        updateAccount.changeNotifications(notifications.isStudyCreatedByWeb(),
+                notifications.isStudyCreatedByEmail(),
+                notifications.isStudyUpdatedByWeb(),
+                notifications.isStudyUpdatedByEmail(),
+                notifications.isStudyEnrollmentResultByEmail(),
+                notifications.isStudyEnrollmentResultByWeb());
     }
 }

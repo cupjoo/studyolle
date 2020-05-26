@@ -59,11 +59,32 @@ public class Account {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 
+    public void chanagePersonalInfo(String url, String occupation, String location,
+                            String bio, String profileImage){
+        this.url = url;
+        this.occupation = occupation;
+        this.location = location;
+        this.bio = bio;
+        this.profileImage = profileImage;
+    }
+
     public void changePassword(String newPassword) {
         this.password = newPassword;
     }
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void changeNotifications(boolean studyCreatedByWeb, boolean studyCreatedByEmail,
+                                    boolean studyUpdatedByWeb, boolean studyUpdatedByEmail,
+                                    boolean studyEnrollmentResultByEmail,
+                                    boolean studyEnrollmentResultByWeb) {
+        this.studyCreatedByWeb = studyCreatedByWeb;
+        this.studyCreatedByEmail = studyCreatedByEmail;
+        this.studyUpdatedByWeb = studyUpdatedByWeb;
+        this.studyUpdatedByEmail = studyUpdatedByEmail;
+        this.studyEnrollmentResultByEmail = studyEnrollmentResultByEmail;
+        this.studyEnrollmentResultByWeb = studyEnrollmentResultByWeb;
     }
 }

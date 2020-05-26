@@ -4,7 +4,6 @@ import com.studyolle.domain.Account;
 import com.studyolle.settings.form.Notifications;
 import com.studyolle.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +28,6 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
 
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
@@ -87,7 +85,9 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public void updateProfile(Account account, Profile profile) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
-        modelMapper.map(profile, updateAccount);
+        updateAccount.chanagePersonalInfo(profile.getUrl(),
+                profile.getOccupation(), profile.getLocation(),
+                profile.getBio(), profile.getProfileImage());
     }
 
     @Transactional
@@ -99,7 +99,12 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public void updateNotifications(Account account, Notifications notifications) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
-        modelMapper.map(notifications, updateAccount);
+        updateAccount.changeNotifications(notifications.isStudyCreatedByWeb(),
+                notifications.isStudyCreatedByEmail(),
+                notifications.isStudyUpdatedByWeb(),
+                notifications.isStudyUpdatedByEmail(),
+                notifications.isStudyEnrollmentResultByEmail(),
+                notifications.isStudyEnrollmentResultByWeb());
     }
 
     @Transactional

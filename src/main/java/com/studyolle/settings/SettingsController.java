@@ -10,7 +10,6 @@ import com.studyolle.settings.form.Profile;
 import com.studyolle.settings.validator.NicknameValidator;
 import com.studyolle.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -34,7 +33,6 @@ public class SettingsController {
     static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
 
     private final AccountService accountService;
-    private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
 
     @InitBinder("passwordForm")
@@ -50,7 +48,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_PROFILE_URL)
     public String updateProfileForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(account, Profile.class));
+        model.addAttribute(new Profile(account));
         return SETTINGS_PROFILE_VIEW_NAME;
     }
 
@@ -88,7 +86,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_NOTIFICATIONS_URL)
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(account, Notifications.class));
+        model.addAttribute(new Notifications(account));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
@@ -107,7 +105,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccountForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(account, NicknameForm.class));
+        model.addAttribute(new NicknameForm(account));
         return SETTINGS_ACCOUNT_VIEW_NAME;
     }
 

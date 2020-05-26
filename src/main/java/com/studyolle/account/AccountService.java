@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class AccountService implements UserDetailsService {
 
@@ -29,7 +29,6 @@ public class AccountService implements UserDetailsService {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account account = saveNewAccount(signUpForm);
         account.generateEmailCheckToken();
@@ -66,6 +65,7 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
@@ -76,13 +76,11 @@ public class AccountService implements UserDetailsService {
         return new UserAccount(account);
     }
 
-    @Transactional
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
     }
 
-    @Transactional
     public void updateProfile(Account account, Profile profile) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.chanagePersonalInfo(profile.getUrl(),
@@ -90,13 +88,11 @@ public class AccountService implements UserDetailsService {
                 profile.getBio(), profile.getProfileImage());
     }
 
-    @Transactional
     public void updatePassword(Account account, String newPassword) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changePassword(passwordEncoder.encode(newPassword));
     }
 
-    @Transactional
     public void updateNotifications(Account account, Notifications notifications) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changeNotifications(notifications.isStudyCreatedByWeb(),
@@ -107,7 +103,6 @@ public class AccountService implements UserDetailsService {
                 notifications.isStudyEnrollmentResultByWeb());
     }
 
-    @Transactional
     public void updateNickname(Account account, String nickname) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changeNickname(nickname);

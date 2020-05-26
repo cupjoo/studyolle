@@ -15,6 +15,7 @@ import java.io.InputStream;
 @Profile("local")
 @Component
 public class ConsoleMailSender implements JavaMailSender {
+
     @Override
     public MimeMessage createMimeMessage() {
         return null;

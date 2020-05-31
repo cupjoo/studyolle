@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -41,6 +43,9 @@ public class Account {
     private boolean studyEnrollmentResultByWeb = true;
     private boolean studyUpdatedByEmail;
     private boolean studyUpdatedByWeb = true;
+
+    @OneToMany(mappedBy = "account")
+    private List<AccountTag> accountTags = new ArrayList<>();
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -86,5 +91,9 @@ public class Account {
         this.studyUpdatedByEmail = studyUpdatedByEmail;
         this.studyEnrollmentResultByEmail = studyEnrollmentResultByEmail;
         this.studyEnrollmentResultByWeb = studyEnrollmentResultByWeb;
+    }
+
+    public void addTag(AccountTag accountTag){
+        accountTags.add(accountTag);
     }
 }

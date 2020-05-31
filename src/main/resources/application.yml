@@ -1,3 +1,18 @@
 spring:
   profiles:
     active: local
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 운영 시에는 validate (검증만 함)
+    properties:
+      hibernate:
+        format_sql: true
+
+# SQL Logging
+logging.level:
+  org:
+    hibernate:
+      SQL: DEBUG
+      type:
+        descriptor:
+          sql: TRACE

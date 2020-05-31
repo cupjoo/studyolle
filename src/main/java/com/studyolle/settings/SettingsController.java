@@ -3,13 +3,11 @@ package com.studyolle.settings;
 import com.studyolle.account.AccountService;
 import com.studyolle.account.CurrentUser;
 import com.studyolle.domain.Account;
-import com.studyolle.settings.form.NicknameForm;
-import com.studyolle.settings.form.Notifications;
-import com.studyolle.settings.form.PasswordForm;
-import com.studyolle.settings.form.Profile;
+import com.studyolle.settings.form.*;
 import com.studyolle.settings.validator.NicknameValidator;
 import com.studyolle.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -31,6 +29,8 @@ public class SettingsController {
     static final String SETTINGS_NOTIFICATIONS_URL = "/" + SETTINGS_NOTIFICATIONS_VIEW_NAME;
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
+    static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
+    static final String SETTINGS_TAGS_URL = "/" + SETTINGS_TAGS_VIEW_NAME;
 
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
@@ -119,5 +119,18 @@ public class SettingsController {
         accountService.updateNickname(account, nicknameForm.getNickname());
         attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
         return "redirect:" + SETTINGS_ACCOUNT_URL;
+    }
+
+    @GetMapping(SETTINGS_TAGS_URL)
+    public String updateTags(@CurrentUser Account account, Model model){
+        model.addAttribute(account);
+        return SETTINGS_TAGS_VIEW_NAME;
+    }
+
+    @PostMapping(SETTINGS_TAGS_URL+"/add")
+    @ResponseBody
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm){
+        accountService.addTag(account, tagForm.getTagTitle());
+        return ResponseEntity.ok().build();
     }
 }

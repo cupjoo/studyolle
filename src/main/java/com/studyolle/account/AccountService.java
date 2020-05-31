@@ -1,8 +1,12 @@
 package com.studyolle.account;
 
 import com.studyolle.domain.Account;
+import com.studyolle.domain.AccountTag;
+import com.studyolle.domain.Tag;
 import com.studyolle.settings.form.Notifications;
 import com.studyolle.settings.form.Profile;
+import com.studyolle.tag.AccountTagRepository;
+import com.studyolle.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,6 +30,8 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
+    private final AccountTagRepository accountTagRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
@@ -117,5 +123,15 @@ public class AccountService implements UserDetailsService {
         mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, String tagTitle) {
+        Tag tag = tagRepository.findByTitle(tagTitle)
+                .orElse(tagRepository.save(Tag.builder().title(tagTitle).build()));
+        Account byId = accountRepository.findById(account.getId())
+                .orElseThrow(() -> new UsernameNotFoundException(account.getNickname()));
+
+        accountTagRepository.save(AccountTag.builder()
+                .account(byId).tag(tag).build());
     }
 }

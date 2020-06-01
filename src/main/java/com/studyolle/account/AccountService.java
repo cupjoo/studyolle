@@ -127,9 +127,14 @@ public class AccountService implements UserDetailsService {
 
     public void addTag(Account account, String tagTitle) {
         Tag tag = tagRepository.findByTitle(tagTitle)
-                .orElse(tagRepository.save(Tag.builder().title(tagTitle).build()));
+                .orElseGet(() -> tagRepository.save(Tag.builder().title(tagTitle).build()));
         accountTagRepository.save(AccountTag.builder()
                 .account(account).tag(tag).build());
+    }
+
+    public List<String> getAllTags(){
+        return tagRepository.findAllByOrderByTitle().stream()
+                .map(Tag::getTitle).collect(toList());
     }
 
     public List<String> getTags(Account account){

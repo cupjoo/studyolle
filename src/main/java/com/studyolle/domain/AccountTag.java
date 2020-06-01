@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Getter
 @NoArgsConstructor
 @Entity
@@ -12,11 +14,11 @@ public class AccountTag {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
@@ -28,7 +30,10 @@ public class AccountTag {
     }
 
     private void addTag(){
-        account.getAccountTags().add(this);
         tag.getAccountTags().add(this);
+    }
+
+    public String getTitle(){
+        return tag.getTitle();
     }
 }

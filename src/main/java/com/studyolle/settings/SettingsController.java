@@ -124,6 +124,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_TAGS_URL)
     public String updateTags(@CurrentUser Account account, Model model){
         model.addAttribute(account);
+        model.addAttribute("tags", accountService.getTags(account));
         return SETTINGS_TAGS_VIEW_NAME;
     }
 
@@ -132,5 +133,13 @@ public class SettingsController {
     public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm){
         accountService.addTag(account, tagForm.getTagTitle());
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(SETTINGS_TAGS_URL + "/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String tagTitle = tagForm.getTagTitle();
+        return accountService.removeTag(account, tagTitle) ?
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

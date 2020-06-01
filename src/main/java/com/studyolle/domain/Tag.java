@@ -29,8 +29,4 @@ public class Tag {
     public Tag(String title){
         this.title = title;
     }
-
-    public void addTag(AccountTag accountTag){
-        accountTags.add(accountTag);
-    }
 }

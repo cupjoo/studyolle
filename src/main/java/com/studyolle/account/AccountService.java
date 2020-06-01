@@ -22,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional
@@ -47,9 +50,6 @@ public class AccountService implements UserDetailsService {
                 .email(signUpForm.getEmail())
                 .nickname(signUpForm.getNickname())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
                 .build();
         return accountRepository.save(account);
     }
@@ -128,10 +128,24 @@ public class AccountService implements UserDetailsService {
     public void addTag(Account account, String tagTitle) {
         Tag tag = tagRepository.findByTitle(tagTitle)
                 .orElse(tagRepository.save(Tag.builder().title(tagTitle).build()));
-        Account byId = accountRepository.findById(account.getId())
-                .orElseThrow(() -> new UsernameNotFoundException(account.getNickname()));
-
         accountTagRepository.save(AccountTag.builder()
-                .account(byId).tag(tag).build());
+                .account(account).tag(tag).build());
+    }
+
+    public List<String> getTags(Account account){
+        return accountTagRepository.findByAccount(account).stream()
+                .map(AccountTag::getTitle).collect(toList());
+    }
+    
+    public boolean removeTag(Account account, String tagTitle){
+        boolean hasRemoved = false;
+
+        Optional<Tag> byTitle = tagRepository.findByTitle(tagTitle);
+        if(byTitle.isPresent()) {
+            AccountTag accountTag = accountTagRepository.findAccountTag(account, byTitle.get());
+            accountTagRepository.delete(accountTag);
+            hasRemoved = true;
+        }
+        return hasRemoved;
     }
 }

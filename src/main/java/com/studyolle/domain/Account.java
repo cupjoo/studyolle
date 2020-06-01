@@ -1,15 +1,15 @@
 package com.studyolle.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-@Builder
-@AllArgsConstructor @NoArgsConstructor
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "id")
 @Entity
@@ -38,14 +38,21 @@ public class Account {
 
     private LocalDateTime emailCheckTokenGeneratedAt;
     private boolean studyCreatedByEmail;
-    private boolean studyCreatedByWeb = true;
+    private boolean studyCreatedByWeb;
     private boolean studyEnrollmentResultByEmail;
-    private boolean studyEnrollmentResultByWeb = true;
+    private boolean studyEnrollmentResultByWeb;
     private boolean studyUpdatedByEmail;
-    private boolean studyUpdatedByWeb = true;
+    private boolean studyUpdatedByWeb;
 
-    @OneToMany(mappedBy = "account")
-    private List<AccountTag> accountTags = new ArrayList<>();
+    @Builder
+    public Account(String email, String nickname, String password){
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        studyCreatedByWeb = true;
+        studyEnrollmentResultByWeb = true;
+        studyUpdatedByWeb = true;
+    }
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -91,9 +98,5 @@ public class Account {
         this.studyUpdatedByEmail = studyUpdatedByEmail;
         this.studyEnrollmentResultByEmail = studyEnrollmentResultByEmail;
         this.studyEnrollmentResultByWeb = studyEnrollmentResultByWeb;
-    }
-
-    public void addTag(AccountTag accountTag){
-        accountTags.add(accountTag);
     }
 }

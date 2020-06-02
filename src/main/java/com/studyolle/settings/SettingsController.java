@@ -2,10 +2,12 @@ package com.studyolle.settings;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyolle.account.*;
+import com.studyolle.account.AccountService;
+import com.studyolle.account.CurrentAccount;
 import com.studyolle.domain.Account;
 import com.studyolle.settings.form.*;
-import com.studyolle.settings.validator.*;
+import com.studyolle.settings.validator.NicknameValidator;
+import com.studyolle.settings.validator.PasswordFormValidator;
 import com.studyolle.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

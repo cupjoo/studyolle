@@ -50,6 +50,7 @@ class SettingsControllerTest {
         accountRepository.deleteAll();
     }
 
+    // 프로필 수정 테스트
     @WithAccount("junyoung")
     @DisplayName("프로필 수정 폼")
     @Test
@@ -94,6 +95,7 @@ class SettingsControllerTest {
         assertThat(junyoung.getBio()).isNull();
     }
 
+    // 패스워드 수정 테스트
     @WithAccount("junyoung")
     @DisplayName("패스워드 수정 폼")
     @Test
@@ -135,6 +137,8 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("account"));
     }
 
+    // 닉네임 수정 테스트
+    
     @WithAccount("junyoung")
     @DisplayName("닉네임 수정 폼")
     @Test
@@ -175,6 +179,8 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("nicknameForm"));
     }
 
+    // 태그 수정 테스트
+    
     @WithAccount("junyoung")
     @DisplayName("계정의 태그 수정 폼")
     @Test
@@ -213,9 +219,8 @@ class SettingsControllerTest {
     void removeTag() throws Exception {
         Account junyoung = accountRepository.findByNickname("junyoung");
         Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
-        tagService.addTag(junyoung, "newTag");
+        AccountTag accountTag = tagService.addTag(junyoung, "newTag");
 
-        AccountTag accountTag = newTag.getAccountTags().get(0);
         assertThat(accountTag.getAccount().equals(junyoung)).isTrue();
 
         TagForm tagForm = new TagForm();

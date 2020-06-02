@@ -5,12 +5,14 @@ import com.studyolle.domain.AccountTag;
 import com.studyolle.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class TagService {
@@ -18,18 +20,20 @@ public class TagService {
     private final TagRepository tagRepository;
     private final AccountTagRepository accountTagRepository;
 
-    public void addTag(Account account, String tagTitle) {
+    public AccountTag addTag(Account account, String tagTitle) {
         Tag tag = tagRepository.findByTitle(tagTitle)
                 .orElseGet(() -> tagRepository.save(Tag.builder().title(tagTitle).build()));
-        accountTagRepository.save(AccountTag.builder()
+        return accountTagRepository.save(AccountTag.builder()
                 .account(account).tag(tag).build());
     }
 
+    @Transactional(readOnly = true)
     public List<String> getAllTags(){
         return tagRepository.findAllByOrderByTitle().stream()
                 .map(Tag::getTitle).collect(toList());
     }
 
+    @Transactional(readOnly = true)
     public List<String> getTags(Account account){
         return accountTagRepository.findByAccount(account).stream()
                 .map(AccountTag::getTitle).collect(toList());

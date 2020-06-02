@@ -31,7 +31,6 @@ public class AccountService implements UserDetailsService {
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account account = saveNewAccount(signUpForm);
-        account.generateEmailCheckToken();
         sendSignUpConfirmEmail(account);
         return account;
     }
@@ -42,6 +41,7 @@ public class AccountService implements UserDetailsService {
                 .nickname(signUpForm.getNickname())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
                 .build();
+        account.generateEmailCheckToken();
         return accountRepository.save(account);
     }
 

@@ -4,14 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolle.WithAccount;
 import com.studyolle.account.AccountRepository;
 import com.studyolle.account.AccountService;
-import com.studyolle.domain.Account;
-import com.studyolle.domain.AccountTag;
-import com.studyolle.domain.Tag;
+import com.studyolle.domain.*;
 import com.studyolle.settings.form.TagForm;
+import com.studyolle.settings.form.ZoneForm;
 import com.studyolle.tag.AccountTagRepository;
 import com.studyolle.tag.TagRepository;
 import com.studyolle.tag.TagService;
+import com.studyolle.zone.AccountZoneRepository;
+import com.studyolle.zone.ZoneRepository;
+import com.studyolle.zone.ZoneService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +43,28 @@ class SettingsControllerTest {
     @Autowired AccountRepository accountRepository;
     @Autowired TagRepository tagRepository;
     @Autowired AccountTagRepository accountTagRepository;
-    @Autowired PasswordEncoder passwordEncoder;
-    @Autowired ObjectMapper objectMapper;
+    @Autowired AccountZoneRepository accountZoneRepository;
+    @Autowired ZoneRepository zoneRepository;
+
     @Autowired AccountService accountService;
     @Autowired TagService tagService;
+    @Autowired ZoneService zoneService;
+
+    @Autowired PasswordEncoder passwordEncoder;
+    @Autowired ObjectMapper objectMapper;
+
+    private Zone testZone = Zone.builder()
+            .city("test").localNameOfCity("테스트시").province("테스트주").build();
+
+    @BeforeEach
+    void beforeEach(){
+        zoneRepository.save(testZone);
+    }
 
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
+        zoneRepository.deleteAll();
     }
 
     // 프로필 수정 테스트
@@ -237,5 +254,63 @@ class SettingsControllerTest {
 
         List<AccountTag> byAccount = accountTagRepository.findByAccount(junyoung);
         assertThat(byAccount.isEmpty()).isTrue();
+    }
+
+    // 지역정보 수정 테스트
+    
+    @WithAccount("junyoung")
+    @DisplayName("계정의 지역 정보 수정 폼")
+    @Test
+    void updateZonesForm() throws Exception {
+        mockMvc.perform(get(ROOT + SETTINGS + ZONES))
+                .andExpect(view().name(SETTINGS + ZONES))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("zones"));
+    }
+
+    @WithAccount("junyoung")
+    @DisplayName("계정의 지역 정보 추가")
+    @Test
+    void addZone() throws Exception {
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Account junyoung = accountRepository.findByNickname("junyoung");
+        AccountZone accountZone = testZone.getAccountZones().get(0);
+        assertThat(accountZone.getAccount().equals(junyoung)).isTrue();
+    }
+
+    @WithAccount("junyoung")
+    @DisplayName("계정의 지역 정보 추가")
+    @Test
+    void removeZone() throws Exception {
+        Account junyoung = accountRepository.findByNickname("junyoung");
+        AccountZone accountZone = zoneService.addZone(junyoung, testZone);
+
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(delete(ROOT + SETTINGS + ZONES)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        String city = testZone.getCity();
+        String province = testZone.getProvince();
+        Optional<Zone> byCityAndProvince =
+                zoneRepository.findByCityAndProvince(city, province);
+        assertThat(byCityAndProvince.isPresent()).isTrue();
+
+        List<AccountZone> accountZoneByAccount =
+                accountZoneRepository.findAccountZoneByAccount(junyoung);
+        assertThat(accountZoneByAccount.isEmpty()).isTrue();
     }
 }

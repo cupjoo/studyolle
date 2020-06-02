@@ -1,5 +1,7 @@
 package com.studyolle.zone;
 
+import com.studyolle.domain.Account;
+import com.studyolle.domain.AccountZone;
 import com.studyolle.domain.Zone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,6 +24,7 @@ import static java.util.stream.Collectors.toList;
 public class ZoneService {
 
     private final ZoneRepository zoneRepository;
+    private final AccountZoneRepository accountZoneRepository;
 
     @PostConstruct
     public void initZoneData() throws IOException {
@@ -37,5 +41,38 @@ public class ZoneService {
                     }).collect(toList());
             zoneRepository.saveAll(zoneList);
         }
+    }
+
+    public AccountZone addZone(Account account, Zone zone) {
+        Zone selectZone = zoneRepository.findByCityAndProvince(zone.getCity(), zone.getProvince())
+                .orElseGet(() -> zoneRepository.save(zone));
+        return accountZoneRepository.save(AccountZone.builder()
+                .account(account).zone(selectZone).build());
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getZones(Account account){
+        return accountZoneRepository.findAccountZoneByAccount(account).stream()
+                .map(accountZone -> accountZone.getZone().toString()).collect(toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getAllZones(){
+        return zoneRepository.findAllByNameAsc().stream()
+                .map(Zone::toString).collect(toList());
+    }
+
+    public boolean removeZone(Account account, Zone zone) {
+        Optional<Zone> findZone =
+                zoneRepository.findByCityAndProvince(zone.getCity(), zone.getProvince());
+        if(findZone.isPresent()){
+            Optional<AccountZone> accountZone =
+                    accountZoneRepository.findAccountZoneByAccountAndZone(account, findZone.get());
+            if(accountZone.isPresent()){
+                accountZoneRepository.delete(accountZone.get());
+                return true;
+            }
+        }
+        return false;
     }
 }

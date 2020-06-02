@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolle.account.AccountService;
 import com.studyolle.account.CurrentAccount;
 import com.studyolle.domain.Account;
+import com.studyolle.domain.Zone;
 import com.studyolle.settings.form.*;
 import com.studyolle.settings.validator.NicknameValidator;
 import com.studyolle.settings.validator.PasswordFormValidator;
 import com.studyolle.tag.TagService;
+import com.studyolle.zone.ZoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,6 +39,7 @@ public class SettingsController {
 
     private final AccountService accountService;
     private final TagService tagService;
+    private final ZoneService zoneService;
     private final NicknameValidator nicknameValidator;
     private final ObjectMapper objectMapper;
 
@@ -148,6 +151,34 @@ public class SettingsController {
     public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String tagTitle = tagForm.getTagTitle();
         return tagService.removeTag(account, tagTitle) ?
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(ZONES)
+    public String updateZones(@CurrentAccount Account account, Model model) throws JsonProcessingException {
+        List<String> allZones = zoneService.getAllZones();
+
+        model.addAttribute(account);
+        model.addAttribute("zones", zoneService.getZones(account));
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+        return SETTINGS + ZONES;
+    }
+
+    @PostMapping(ZONES)
+    @ResponseBody
+    public ResponseEntity addZone(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm){
+        Zone zone = zoneForm.getZone();
+        if(zone == null){
+            return ResponseEntity.badRequest().build();
+        }
+        zoneService.addZone(account, zoneForm.getZone());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(ZONES)
+    @ResponseBody
+    public ResponseEntity removeZone(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
+        return zoneService.removeZone(account, zoneForm.getZone()) ?
                 ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

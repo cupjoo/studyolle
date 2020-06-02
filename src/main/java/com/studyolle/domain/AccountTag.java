@@ -8,6 +8,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 public class AccountTag {
 

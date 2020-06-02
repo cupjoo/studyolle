@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 // 로그인한 계정이 맞으면 UserAccount에서 Account 반환
 @AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : account")
-public @interface CurrentUser {
+public @interface CurrentAccount {
 }

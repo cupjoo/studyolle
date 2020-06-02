@@ -2,12 +2,11 @@ package com.studyolle.settings;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyolle.account.AccountService;
-import com.studyolle.account.CurrentUser;
+import com.studyolle.account.*;
 import com.studyolle.domain.Account;
 import com.studyolle.settings.form.*;
-import com.studyolle.settings.validator.NicknameValidator;
-import com.studyolle.settings.validator.PasswordFormValidator;
+import com.studyolle.settings.validator.*;
+import com.studyolle.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,6 +35,7 @@ public class SettingsController {
     static final String SETTINGS_TAGS_URL = "/" + SETTINGS_TAGS_VIEW_NAME;
 
     private final AccountService accountService;
+    private final TagService tagService;
     private final NicknameValidator nicknameValidator;
     private final ObjectMapper objectMapper;
 
@@ -127,10 +127,10 @@ public class SettingsController {
 
     @GetMapping(SETTINGS_TAGS_URL)
     public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
-        List<String> allTags = accountService.getAllTags();
+        List<String> allTags = tagService.getAllTags();
 
         model.addAttribute(account);
-        model.addAttribute("tags", accountService.getTags(account));
+        model.addAttribute("tags", tagService.getTags(account));
         model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
         return SETTINGS_TAGS_VIEW_NAME;
     }
@@ -138,7 +138,7 @@ public class SettingsController {
     @PostMapping(SETTINGS_TAGS_URL+"/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm){
-        accountService.addTag(account, tagForm.getTagTitle());
+        tagService.addTag(account, tagForm.getTagTitle());
         return ResponseEntity.ok().build();
     }
 
@@ -146,7 +146,7 @@ public class SettingsController {
     @ResponseBody
     public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String tagTitle = tagForm.getTagTitle();
-        return accountService.removeTag(account, tagTitle) ?
+        return tagService.removeTag(account, tagTitle) ?
                 ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

@@ -27,24 +27,16 @@ public class ConsoleMailSender implements JavaMailSender {
     }
 
     @Override
-    public void send(MimeMessage mimeMessage) throws MailException {
-
-    }
+    public void send(MimeMessage mimeMessage) throws MailException {}
 
     @Override
-    public void send(MimeMessage... mimeMessages) throws MailException {
-
-    }
+    public void send(MimeMessage... mimeMessages) throws MailException {}
 
     @Override
-    public void send(MimeMessagePreparator mimeMessagePreparator) throws MailException {
-
-    }
+    public void send(MimeMessagePreparator mimeMessagePreparator) throws MailException {}
 
     @Override
-    public void send(MimeMessagePreparator... mimeMessagePreparators) throws MailException {
-
-    }
+    public void send(MimeMessagePreparator... mimeMessagePreparators) throws MailException {}
 
     @Override
     public void send(SimpleMailMessage simpleMessage) throws MailException {
@@ -52,7 +44,5 @@ public class ConsoleMailSender implements JavaMailSender {
     }
 
     @Override
-    public void send(SimpleMailMessage... simpleMessages) throws MailException {
-
-    }
+    public void send(SimpleMailMessage... simpleMessages) throws MailException {}
 }

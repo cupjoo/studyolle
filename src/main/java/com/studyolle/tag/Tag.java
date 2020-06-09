@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @Getter
@@ -22,8 +24,11 @@ public class Tag {
     @Column(unique = true, nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(mappedBy = "tag", fetch = LAZY)
     private List<AccountTag> accountTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "study", fetch = LAZY)
+    private List<StudyTag> studyTags = new ArrayList<>();
 
     @Builder
     public Tag(String title){

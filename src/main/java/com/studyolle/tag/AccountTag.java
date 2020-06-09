@@ -31,10 +31,10 @@ public class AccountTag {
     public AccountTag(Account account, Tag tag){
        this.account = account;
        this.tag = tag;
-       addTag();
+       addTagToAccount();
     }
 
-    private void addTag(){
+    private void addTagToAccount(){
         tag.getAccountTags().add(this);
     }
 

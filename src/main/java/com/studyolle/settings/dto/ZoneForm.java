@@ -1,6 +1,6 @@
-package com.studyolle.settings.form;
+package com.studyolle.settings.dto;
 
-import com.studyolle.domain.Zone;
+import com.studyolle.zone.Zone;
 import lombok.Data;
 
 @Data

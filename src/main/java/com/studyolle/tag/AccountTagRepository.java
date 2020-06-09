@@ -1,8 +1,6 @@
 package com.studyolle.tag;
 
-import com.studyolle.domain.Account;
-import com.studyolle.domain.AccountTag;
-import com.studyolle.domain.Tag;
+import com.studyolle.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

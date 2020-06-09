@@ -1,6 +1,10 @@
-package com.studyolle.domain;
+package com.studyolle.tag;
 
-import lombok.*;
+import com.studyolle.account.Account;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 

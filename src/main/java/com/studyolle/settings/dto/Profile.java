@@ -1,6 +1,6 @@
-package com.studyolle.settings.form;
+package com.studyolle.settings.dto;
 
-import com.studyolle.domain.Account;
+import com.studyolle.account.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;

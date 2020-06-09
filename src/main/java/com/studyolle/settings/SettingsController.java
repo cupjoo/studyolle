@@ -2,14 +2,11 @@ package com.studyolle.settings;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyolle.account.AccountService;
-import com.studyolle.account.CurrentAccount;
-import com.studyolle.domain.Account;
-import com.studyolle.domain.Zone;
-import com.studyolle.settings.form.*;
-import com.studyolle.settings.validator.NicknameValidator;
-import com.studyolle.settings.validator.PasswordFormValidator;
+import com.studyolle.account.*;
+import com.studyolle.settings.dto.*;
+import com.studyolle.settings.validator.*;
 import com.studyolle.tag.TagService;
+import com.studyolle.zone.Zone;
 import com.studyolle.zone.ZoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -94,7 +91,7 @@ public class SettingsController {
     @GetMapping(NOTIFICATIONS)
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Notifications(account));
+        model.addAttribute(account.getNotification());
         return SETTINGS + NOTIFICATIONS;
     }
 

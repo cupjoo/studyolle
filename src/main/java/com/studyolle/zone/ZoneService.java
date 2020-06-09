@@ -1,8 +1,6 @@
 package com.studyolle.zone;
 
-import com.studyolle.domain.Account;
-import com.studyolle.domain.AccountZone;
-import com.studyolle.domain.Zone;
+import com.studyolle.account.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

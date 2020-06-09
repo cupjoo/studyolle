@@ -1,8 +1,8 @@
 package com.studyolle.account;
 
-import com.studyolle.domain.Account;
-import com.studyolle.settings.form.Notifications;
-import com.studyolle.settings.form.Profile;
+import com.studyolle.account.dto.SignUpForm;
+import com.studyolle.account.dto.UserAccount;
+import com.studyolle.settings.dto.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -96,18 +96,8 @@ public class AccountService implements UserDetailsService {
 
     public void updateNotifications(Account account, Notifications notifications) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
-        updateAccount.changeNotifications(notifications.isStudyCreatedByWeb(),
-                notifications.isStudyCreatedByEmail(),
-                notifications.isStudyUpdatedByWeb(),
-                notifications.isStudyUpdatedByEmail(),
-                notifications.isStudyEnrollmentResultByEmail(),
-                notifications.isStudyEnrollmentResultByWeb());
-        account.changeNotifications(notifications.isStudyCreatedByWeb(),
-                notifications.isStudyCreatedByEmail(),
-                notifications.isStudyUpdatedByWeb(),
-                notifications.isStudyUpdatedByEmail(),
-                notifications.isStudyEnrollmentResultByEmail(),
-                notifications.isStudyEnrollmentResultByWeb());
+        updateAccount.changeNotifications(notifications);
+        account.changeNotifications(notifications);
     }
 
     public void updateNickname(Account account, String nickname) {

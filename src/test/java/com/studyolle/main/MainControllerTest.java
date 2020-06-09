@@ -2,7 +2,7 @@ package com.studyolle.main;
 
 import com.studyolle.account.AccountRepository;
 import com.studyolle.account.AccountService;
-import com.studyolle.account.SignUpForm;
+import com.studyolle.account.dto.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

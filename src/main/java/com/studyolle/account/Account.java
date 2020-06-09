@@ -1,4 +1,4 @@
-package com.studyolle.domain;
+package com.studyolle.account;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -37,21 +37,15 @@ public class Account {
     private String profileImage;
 
     private LocalDateTime emailCheckTokenGeneratedAt;
-    private boolean studyCreatedByEmail;
-    private boolean studyCreatedByWeb;
-    private boolean studyEnrollmentResultByEmail;
-    private boolean studyEnrollmentResultByWeb;
-    private boolean studyUpdatedByEmail;
-    private boolean studyUpdatedByWeb;
+
+    @Embedded
+    private Notifications notifications;
 
     @Builder
     public Account(String email, String nickname, String password){
         this.email = email;
         this.nickname = nickname;
         this.password = password;
-        studyCreatedByWeb = true;
-        studyEnrollmentResultByWeb = true;
-        studyUpdatedByWeb = true;
     }
 
     public void generateEmailCheckToken() {
@@ -88,15 +82,7 @@ public class Account {
         this.nickname = nickname;
     }
 
-    public void changeNotifications(boolean studyCreatedByWeb, boolean studyCreatedByEmail,
-                                    boolean studyUpdatedByWeb, boolean studyUpdatedByEmail,
-                                    boolean studyEnrollmentResultByEmail,
-                                    boolean studyEnrollmentResultByWeb) {
-        this.studyCreatedByWeb = studyCreatedByWeb;
-        this.studyCreatedByEmail = studyCreatedByEmail;
-        this.studyUpdatedByWeb = studyUpdatedByWeb;
-        this.studyUpdatedByEmail = studyUpdatedByEmail;
-        this.studyEnrollmentResultByEmail = studyEnrollmentResultByEmail;
-        this.studyEnrollmentResultByWeb = studyEnrollmentResultByWeb;
+    public void changeNotifications(Notifications notifications) {
+        this.notifications.changeNotifications(notifications);
     }
 }

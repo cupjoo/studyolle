@@ -1,5 +1,6 @@
-package com.studyolle.domain;
+package com.studyolle.zone;
 
+import com.studyolle.account.Account;
 import lombok.*;
 
 import javax.persistence.*;

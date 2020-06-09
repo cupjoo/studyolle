@@ -80,7 +80,10 @@ public class AccountService implements UserDetailsService {
 
     public void updateProfile(Account account, Profile profile) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
-        updateAccount.chanagePersonalInfo(profile.getUrl(),
+        updateAccount.changePersonalInfo(profile.getUrl(),
+                profile.getOccupation(), profile.getLocation(),
+                profile.getBio(), profile.getProfileImage());
+        account.changePersonalInfo(profile.getUrl(),
                 profile.getOccupation(), profile.getLocation(),
                 profile.getBio(), profile.getProfileImage());
     }
@@ -88,6 +91,7 @@ public class AccountService implements UserDetailsService {
     public void updatePassword(Account account, String newPassword) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changePassword(passwordEncoder.encode(newPassword));
+        account.changePassword(passwordEncoder.encode(newPassword));
     }
 
     public void updateNotifications(Account account, Notifications notifications) {
@@ -98,12 +102,19 @@ public class AccountService implements UserDetailsService {
                 notifications.isStudyUpdatedByEmail(),
                 notifications.isStudyEnrollmentResultByEmail(),
                 notifications.isStudyEnrollmentResultByWeb());
+        account.changeNotifications(notifications.isStudyCreatedByWeb(),
+                notifications.isStudyCreatedByEmail(),
+                notifications.isStudyUpdatedByWeb(),
+                notifications.isStudyUpdatedByEmail(),
+                notifications.isStudyEnrollmentResultByEmail(),
+                notifications.isStudyEnrollmentResultByWeb());
     }
 
     public void updateNickname(Account account, String nickname) {
         Account updateAccount = accountRepository.findByNickname(account.getNickname());
         updateAccount.changeNickname(nickname);
-        login(updateAccount);
+        account.changeNickname(nickname);
+        login(account);
     }
 
     public void sendLoginLink(Account account) {

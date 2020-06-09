@@ -71,8 +71,8 @@ public class Account {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 
-    public void chanagePersonalInfo(String url, String occupation, String location,
-                            String bio, String profileImage){
+    public void changePersonalInfo(String url, String occupation, String location,
+                                   String bio, String profileImage){
         this.url = url;
         this.occupation = occupation;
         this.location = location;

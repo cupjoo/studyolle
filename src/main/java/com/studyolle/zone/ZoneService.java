@@ -44,10 +44,11 @@ public class ZoneService {
     }
 
     public AccountZone addZone(Account account, Zone zone) {
-        Zone selectZone = zoneRepository.findByCityAndProvince(zone.getCity(), zone.getProvince())
-                .orElseGet(() -> zoneRepository.save(zone));
+        Optional<Zone> selectZone = zoneRepository.findByCityAndProvince(zone.getCity(), zone.getProvince());
+        List<Zone> list = zoneRepository.findByCity(zone.getCity());
+        Zone saveZone = selectZone.orElseGet(() -> zoneRepository.save(zone));
         return accountZoneRepository.save(AccountZone.builder()
-                .account(account).zone(selectZone).build());
+                .account(account).zone(saveZone).build());
     }
 
     @Transactional(readOnly = true)
